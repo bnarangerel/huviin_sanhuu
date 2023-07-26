@@ -34,7 +34,7 @@ var financeController = (function(){
         this.value = value;
     };
     var data = {
-        allItems: {
+        items: {
             inc: [],
             exp: []
         },
@@ -43,20 +43,43 @@ var financeController = (function(){
             exp: 0
         }
     };
+    return {
+        addItem: function(type, desc, val){
+            var item, id;
+
+            if(data.items[type].length === 0) id = 1;
+            else {
+                id = data.item[type][data.items[type].length - 1].id + 1;
+            }
+
+            if(type === 'inc'){
+                item = new Income(id, desc, val);
+            } else {
+                item = new Expense(id, desc, val);
+            }
+            data.items[type].push(item);
+        }, 
+        data: function(){
+            return data;
+        }
+    }
 })();
 //Program holbogc controller
 var appController = (function(uiController, financeController){
     var ctrlAddItem = function(){
         //1. Oruulah ugugdliig delgetsnees olj avna
-        console.log(uiController.getInput().value)
+        var input = uiController.getInput();
+        console.log(input);
         //2. olj avsan ugugdluudee sanhuugiin controllert damjuulj tend hadgalna
+        financeController.addItem(input.type, input.desc, input.value);
+        console.log(financeController.data());
         //3. olj avsan ugugdluudee web dre tohiroh hesegt n gargana
         //4. tusviig tootsoolno
         //5. etssiin uldegddel, tootsoog delgetsend gargana
     }
     var setupEventListeners = function(){
 
-        var DOM = uiController.DOMstrings
+        var DOM = uiController.getDOMstrings()
 
         document.querySelector(DOM.addBtn).addEventListener('click', function(){
             ctrlAddItem();
