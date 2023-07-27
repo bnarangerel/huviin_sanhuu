@@ -8,7 +8,11 @@ var uiController = (function(){
         inputValue: ".add__value",
         addBtn: ".add__btn",
         incomeList: ".income__list",
-        expenseList: ".expenses__list"
+        expenseList: ".expenses__list",
+        budgetValue: ".budget__value",
+        incomeLabel: ".budget__income--value",
+        expenseLabel: ".budget__expenses--value",
+        persentageLabel: ".budget__expenses--percentage",
     }
     return{
         getInput: function(){
@@ -29,6 +33,18 @@ var uiController = (function(){
                 el.value = "";
             });
             fieldsArr[0].focus();
+        },
+        tusviigUzuuleh: function(tusuv){
+            document.querySelector(DOMstrings.budgetValue).textContent = tusuv.tusuv;
+            document.querySelector(DOMstrings.incomeLabel).textContent = tusuv.totalInc;
+            document.querySelector(DOMstrings.expenseLabel).textContent = tusuv.totalExp;
+            if(tusuv.huvi !== 0){
+                document.querySelector(DOMstrings.persentageLabel).textContent = tusuv.huvi+ '%';
+            } else {
+                document.querySelector(DOMstrings.persentageLabel).textContent = tusuv.huvi;
+            }
+            
+
         },
         addListItem: function(item, type){
             //Орлого, Зарлагын элементийг агуулсан html-г бэлтгэнэ.
@@ -76,8 +92,9 @@ var financeController = (function(){
     };
     var calculateTotal = function(type){
         sum = 0;
-        data.items[type].value.forEach(function(el){
-            sum += el;
+        data.items[type].forEach(function(el){
+            sum = sum + el.value;
+            console.log(el.value)
         });
         data.totals[type] = sum;
     };
@@ -137,7 +154,8 @@ var appController = (function(uiController, financeController){
             //5. etssiin uldegddel
            var tusuv = financeController.tusuvAvah();
            //6. tootsoog delgetsend gargana
-           console.log(tusuv)
+           uiController.tusviigUzuuleh(tusuv);
+           console.log(tusuv);
         }
     };
     var setupEventListeners = function(){
@@ -154,6 +172,12 @@ var appController = (function(uiController, financeController){
     return{
         init: function(){
             console.log('Application started...');
+            uiController.tusviigUzuuleh({
+                tusuv: 0, 
+                huvi: 0,
+                totalInc: 0, 
+                totalExp: 0
+            });
             setupEventListeners();
         }
     }
