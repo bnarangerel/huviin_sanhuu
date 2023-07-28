@@ -15,7 +15,7 @@ var uiController = (function(){
         persentageLabel: ".budget__expenses--percentage",
         containerDev: ".container",
         expensePercentageLabel: '.item__percentage',
-        dateLabel: '.budget__title--month'
+        dateLabel: '.budget__title--month',
     };
     var nodedListForeach = function(list, callback){
         for(var i = 0; i < list.length; i ++){
@@ -44,6 +44,15 @@ var uiController = (function(){
         return z;
     }
     return{
+        changeType: function(){
+            var fields = document.querySelectorAll(DOMstrings.inputType + ', ' + DOMstrings.inputDesc + ', ' + DOMstrings.inputValue);
+
+            nodedListForeach(fields, function(el){
+                el.classList.toggle('red-focus');
+            });
+
+            document.querySelector(DOMstrings.addBtn).classList.toggle("red");
+        },
         displayDate: function(){
             var unuudur = new Date();
 
@@ -276,7 +285,8 @@ var appController = (function(uiController, financeController){
                 //tusuv shineer tootsooloh
                 updateTusuv();
             }
-        })
+        });
+        document.querySelector(DOM.inputType).addEventListener('change', uiController.changeType());
     }
     return{
         init: function(){
